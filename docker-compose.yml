@@ -1,0 +1,71 @@
+version: "3"
+networks:
+  micro-net:
+    driver: bridge
+volumes:
+  api-gateway-nodemodules:
+  booking-service-nodemodules:
+  flight-service-nodemodules:
+  notification-service-nodemodules:
+services:
+  api-gateway:
+    build: ./API_Gateway
+    networks:
+      - micro-net
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./API_Gateway:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/api-gateway
+      - api-gateway-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/api-gateway/node_modules
+
+  rabbitmq:
+    image: "rabbitmq:3.12-management"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - micro-net
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    
+  booking-service:
+    build: ./Booking_service
+    networks:
+      - micro-net
+    ports:
+      - "4000:4000"
+    depends_on:
+       rabbitmq:
+         condition: service_healthy
+
+    volumes:
+      - ./Booking_service:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/booking-service
+      - booking-service-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/booking-service/node_modules
+ 
+  flight-service:
+    build: ./Flight_service
+    networks:
+      - micro-net
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Flight_service:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/flight-service
+      - flight-service-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/flight-service/node_modules
+ 
+  notification-service:
+    build: ./Notification_service
+    networks:
+      - micro-net
+    ports:
+      - "3002:3002"
+    depends_on:
+       rabbitmq:
+         condition: service_healthy
+    volumes:
+      - ./Notification_service:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/notification-service
+      - notification-service-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/notification-service/node_modules
+    
+ 

@@ -1,0 +1,4 @@
+API_Gateway/.env
+Booking_service/.env
+Flight_service/.env
+Notification_service/.env
