@@ -7,17 +7,44 @@ volumes:
   booking-service-nodemodules:
   flight-service-nodemodules:
   notification-service-nodemodules:
+  my-db:
 services:
+  db-service:
+    image: "mysql"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+    networks:
+      - micro-net
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: ${USER}
+      MYSQL_PASSWORD: ${PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD}
+      PASSWORD: ${PASSWORD1}
+    ports:
+      - '3307:3306'
+    expose:
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+
   api-gateway:
+    entrypoint: ["./entrypoint.sh"]
     build: ./API_Gateway
     networks:
       - micro-net
     ports:
       - "3001:3001"
+    depends_on:
+       db-service:
+         condition: service_healthy
     volumes:
       - ./API_Gateway:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/api-gateway
       - api-gateway-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/api-gateway/node_modules
-
+  
   rabbitmq:
     image: "rabbitmq:3.12-management"
     healthcheck:
@@ -28,8 +55,8 @@ services:
     networks:
       - micro-net
     ports:
-      - "5673:5672"
-      - "15673:15672"
+      - "5672:5672"
+      - "15672:15672"
     
   booking-service:
     build: ./Booking_service
@@ -39,6 +66,8 @@ services:
       - "4000:4000"
     depends_on:
        rabbitmq:
+         condition: service_healthy
+       db-service:
          condition: service_healthy
 
     volumes:
@@ -51,6 +80,9 @@ services:
       - micro-net
     ports:
       - "3000:3000"
+    depends_on:
+       db-service:
+         condition: service_healthy
     volumes:
       - ./Flight_service:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/flight-service
       - flight-service-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/flight-service/node_modules
@@ -63,6 +95,8 @@ services:
       - "3002:3002"
     depends_on:
        rabbitmq:
+         condition: service_healthy
+       db-service:
          condition: service_healthy
     volumes:
       - ./Notification_service:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/notification-service

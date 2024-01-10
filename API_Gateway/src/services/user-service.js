@@ -13,7 +13,10 @@ async function createUser(data) {
     try {
         const user = await UserRepository.create(data);
         await UserRepository.addroleTouser(user);
-        return user;
+        return {
+            "id":user.id,
+            "userName": user.userName
+        };
     }
     //client side errorHandling
     catch (error) {
