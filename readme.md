@@ -95,7 +95,43 @@ The project utilizes Docker Compose for managing the multi-container setup. Key 
     MAIL_USERNAME='<enter user name>'
     MAIL_APP_PASSWORD='<enter app pwd>'
  ```
- 
+
+### Setting up Sequelize Configuration in Microservices
+
+To configure Sequelize for your microservices, follow these steps:
+
+### Step 1: Navigate to Microservice Folders
+
+Navigate to each microservice folder and execute the following command:
+
+```bash
+cd path/to/microservice-folder
+npx sequelize init:config
+```
+
+Repeat this step for every microservice in your project.
+
+### Step 2: Update MySQL Configuration
+
+Open the generated Sequelize configuration file (`config/config.json`) inside each microservice folder. Add the MySQL root user and password or the user and password used during MySQL service setup.
+
+Example configuration snippet in `config/config.json`:
+
+```json
+{
+  "development": {
+    "username": "root",
+    "password": "enter_password",
+    "database": "your_database_name",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  // ... other configurations
+}
+```
+
+Replace `"enter_password"` with the actual password used during MySQL service setup.
+
 
 - To initiate the microservices server and construct the necessary images and containers, execute the following command after setting up Docker:
   
