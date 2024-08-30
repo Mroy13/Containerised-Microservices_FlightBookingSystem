@@ -42,7 +42,7 @@ The project utilizes Docker Compose for managing the multi-container setup. Key 
 ## API_ENDPOINTS and Documentaion(4_microservices)
 
 1. [API_GATEWAY_FlightBooking_system](https://documenter.getpostman.com/view/28392756/2s9YsKhY7T)
-2. [FLIGHT_SERVICE_FLIGHTBOOKING_SYESTEM]()
+2. [FLIGHT_SERVICE_FLIGHTBOOKING_SYESTEM](https://documenter.getpostman.com/view/28392756/2sAXjKasMW)
 3. [BOOKING_SERVICE_FLIGHTBOOKING_SYSTEM]()
 4. [NOTIFICATION_SERVICE_FLIGHTBOOKING_SYSTEM]()
 
