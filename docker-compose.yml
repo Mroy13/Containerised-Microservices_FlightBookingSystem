@@ -59,6 +59,7 @@ services:
       - "15672:15672"
     
   booking-service:
+    entrypoint: ["./entrypoint.sh"]
     build: ./Booking_service
     networks:
       - micro-net
@@ -75,6 +76,7 @@ services:
       - booking-service-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/booking-service/node_modules
  
   flight-service:
+    entrypoint: ["./entrypoint.sh"]
     build: ./Flight_service
     networks:
       - micro-net
@@ -88,6 +90,7 @@ services:
       - flight-service-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/flight-service/node_modules
  
   notification-service:
+    entrypoint: ["./entrypoint.sh"]
     build: ./Notification_service
     networks:
       - micro-net

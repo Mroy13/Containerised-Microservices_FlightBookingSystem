@@ -5,5 +5,3 @@ WORKDIR /d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/noti
 COPY . .
 
 RUN npm ci
-
-CMD ["node","--watch","src/index.js"]

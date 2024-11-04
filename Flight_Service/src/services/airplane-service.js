@@ -8,9 +8,8 @@ async function createAirplane(data) {
         const airplane = await AirplaneRepository.create(data);
         return airplane;
     }
-    //client side errorHandling
+    //client side errorHandling(validation error)
     catch (error) {
-        console.log(error);
         if (error.name == 'SequelizeValidationError') {
             const explanation = [];
             error.errors.forEach(err => {
@@ -19,11 +18,21 @@ async function createAirplane(data) {
 
             throw new Apperror(explanation, StatusCode.BAD_REQUEST);
         }
+
+      //database side error handling
+        if (error.name == 'SequelizeDatabaseError') {
+            const explanation = [];
+            explanation.push(error.parent.sqlMessage);
+            throw new Apperror(explanation, StatusCode.BAD_REQUEST);
+        }
+
+
         //server side error handling
         else {
             throw new Apperror("request not resolved due to server side probelem", StatusCode.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
 async function getAirplanes(data) {
     try {

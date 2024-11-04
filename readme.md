@@ -51,7 +51,7 @@ The project utilizes Docker Compose for managing the multi-container setup. Key 
 
  - Download or clone this project from github and open it in your favourite text editor. 
  
- - In the root directory create a `.env` file and add the following env variables
+ - In the root directory, create a .env file and add the following environment variables for the database service setup:
     ```
         USER='enter user name'
         PASSWORD='eneter password'
@@ -123,14 +123,20 @@ Example configuration snippet in `config/config.json`:
     "username": "root",
     "password": "enter_password",
     "database": "your_database_name",
-    "host": "localhost",
+    "host": "db-service",
     "dialect": "mysql"
   },
   // ... other configurations
 }
 ```
 
-Replace `"enter_password"` with the actual password used during MySQL service setup.
+## Database Configuration Fields
+
+- **username**: Your database username (e.g., `"root"`).
+- **password**: The password used during the database service setup using docker compose.
+- **database**: The name of your database (change to your specific database name).
+- **host**: The address of your database server (default is `"db-service"`, change if you rename the service).
+- **dialect**: The database type (set to `"mysql"` for MySQL).
 
 
 - To initiate the microservices server and construct the necessary images and containers, execute the following command after setting up Docker:
