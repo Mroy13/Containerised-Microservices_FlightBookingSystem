@@ -11,6 +11,7 @@ function validateCreateRequest(req,res,next){
 
     }
     
+    // Validate that the arrivalTime is later than the departureTime.
   if(!(dateTimehelper.checkDatetime(req.body.arrivalTime,req.body.departureTime))){
     const message="something went wrong while creating flight";
     ErrorResponse.message=message;

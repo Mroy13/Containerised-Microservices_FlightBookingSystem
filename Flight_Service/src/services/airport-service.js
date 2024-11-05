@@ -9,7 +9,6 @@ async function createAirport(data) {
     }
     //client side errorHandling
     catch (error) {
-        console.log(error);
         if (error.name == 'SequelizeValidationError') {
             const explanation = [];
             error.errors.forEach(err => {
@@ -24,6 +23,8 @@ async function createAirport(data) {
         }
     }
 }
+
+
 async function getAirports(data) {
     try {
         const Airports = await AirportRepository.getAll(data);
@@ -49,6 +50,8 @@ async function getAirport(id) {
         throw new Apperror('Cannot fetch data of the airport', StatusCode.INTERNAL_SERVER_ERROR);
     }
 }
+
+
 async function destroyAirport(id) {
     try {
         const airport= await AirportRepository.destroy(id);
@@ -60,12 +63,12 @@ async function destroyAirport(id) {
         throw new Apperror('Cannot fetch data of the airport', StatusCode.INTERNAL_SERVER_ERROR);
     }
 }
+
 async function updateAirport(id, data) {
     try {
         const airport = await AirportRepository.update(id, data);
         return airport;
     } catch (error) {
-        console.log(error);
         //client side error handling
         if (error.name == 'SequelizeValidationError') {
             const explanation = [];

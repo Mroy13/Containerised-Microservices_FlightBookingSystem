@@ -2,10 +2,6 @@ const { airportService } = require('../services');
 const StatusCode = require('http-status-codes');
 const { SuccessResponse, ErrorResponse } = require('../utils/common');
 
-/**
- * POST : /airports 
- * req-body {name: 'Rajiv Gandhi International Airport', code:'HYD',address:'Shamshabad',cityId:'3'}
- */
 
 async function createAirport(req, res) {
        try {
@@ -86,7 +82,6 @@ async function destroyAirport(req, res) {
 
 }
 async function updateAirport(req, res) {
-       console.log(req.params.id);
        try {
               const airport = await airplaneService.updateAirport(req.params.id, {
                      name: req.body.name,

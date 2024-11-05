@@ -11,7 +11,6 @@ async function createFlight(data) {
     }
     //client side errorHandling
     catch (error) {
-        console.log(error);
         if (error.name == 'SequelizeValidationError') {
             const explanation = [];
             error.errors.forEach(err => {
@@ -26,6 +25,9 @@ async function createFlight(data) {
         }
     }
 }
+
+
+
 //filters:trips:BOM-HYD,travellers=2-0-0,date:28072023,price=17644-92534
 //sort:price,arivalTime,departureTime,duration
 
@@ -35,7 +37,6 @@ async function getAllflights(query) {
     const endingTriptime=" 23:59:00";
     //trips filter
     if (query.trips) {
-        console.log(query.trips);
         //const airportIds=query.trips.split("-");
         [departureAirportId, arrivalAirportId] = query.trips.split("-");
         if (departureAirportId == arrivalAirportId) {
@@ -43,7 +44,6 @@ async function getAllflights(query) {
         }
         customFilter.departureAirportId = departureAirportId;
         customFilter.arrivalAirportId = arrivalAirportId;
-        console.log(customFilter);
     }
     //price filter
     if (query.price) {
@@ -64,10 +64,8 @@ async function getAllflights(query) {
     //TODO:FIX the timeStamp problem create during sequelize query execution
                //sequelize read wrong date data 
     if(query.tripDate){
-        console.log("test");
-        console.log(query.tripDate);
         [startDatetime,endDatetime]=query.tripDate.split("_");
-        console.log(startDatetime);
+
              customFilter.departureTime={
                  [Op.between]:[startDatetime,endDatetime],
      }
@@ -77,10 +75,8 @@ async function getAllflights(query) {
 
    if(query.sort){
     const params = query.sort.split(',');
-    console.log(params);
     const sortFilters = params.map((param) => param.split('_'));
-    sortFilter = sortFilters
-    console.log(sortFilter);
+    sortFilter = sortFilters;
    }
 
     try {
@@ -88,10 +84,12 @@ async function getAllflights(query) {
         return response;
     }
     catch (error) {
-       // console.log(error);
         throw new Apperror("request not resolved due to server side probelem", StatusCode.INTERNAL_SERVER_ERROR);
     }
 }
+
+
+
 async function getFlight(data){
     try{
         const response= await FlightRepository.get(data);
@@ -102,13 +100,14 @@ async function getFlight(data){
     }
 }
 
+
+
 async function updateSeats(id,data){
     try{
            const response=await FlightRepository.updateRemainingseats(id,data.seats,data.dec);
            return response;
     }
     catch(error){
-        console.log(error);
         throw new Apperror("request not resolved due to server side probelem", StatusCode.INTERNAL_SERVER_ERROR);
     }
 }

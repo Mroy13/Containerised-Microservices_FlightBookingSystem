@@ -75,7 +75,6 @@ async function updateAirplane(id, data) {
         const airplane = await AirplaneRepository.update(id, data);
         return airplane;
     } catch (error) {
-        console.log(error);
         //client side error handling
         if (error.name == 'SequelizeValidationError') {
             const explanation = [];

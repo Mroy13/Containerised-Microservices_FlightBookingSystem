@@ -2,10 +2,7 @@ const { cityService } = require('../services');
 const StatusCode = require('http-status-codes');
 const { SuccessResponse, ErrorResponse } = require('../utils/common');
 
-/**
- * POST : /cities 
- * req-body {name: 'London'}
- */
+
 async function createCity(req, res) {
        try {
               const cityInfo = await cityService.createCity({

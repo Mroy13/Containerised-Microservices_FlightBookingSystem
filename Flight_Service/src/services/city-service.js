@@ -10,7 +10,6 @@ async function createCity(data) {
     }
     //client side errorHandling
     catch (error) {
-        console.log(error);
         if (error.name == 'SequelizeValidationError') {
             const explanation = [];
             error.errors.forEach(err => {
@@ -64,7 +63,6 @@ async function destroyCity(id) {
 async function updateCity(id, data) {
     try {
         const city = await CityRepository.update(id, data);
-        console.log(city);
         return city;
     } catch (error) {
         console.log(error);

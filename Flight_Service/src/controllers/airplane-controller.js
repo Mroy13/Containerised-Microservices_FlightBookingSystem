@@ -2,10 +2,7 @@ const { airplaneService } = require('../services');
 const StatusCode = require('http-status-codes');
 const { SuccessResponse, ErrorResponse } = require('../utils/common');
 
-/**
- * POST : /airplanes 
- * req-body {modelNumber: 'airbus320', capacity: 200}
- */
+
 
 async function createAirplane(req, res) {
        try {
@@ -48,7 +45,6 @@ async function getAirplanes(req, res) {
 
 }
 async function getAirplane(req, res) {
-       console.log(req.params.id);
        try {
               const airplane = await airplaneService.getAirplane(req.params.id);
               SuccessResponse.data = airplane;
@@ -67,7 +63,6 @@ async function getAirplane(req, res) {
 
 }
 async function destroyAirplane(req, res) {
-       console.log(req.params.id);
        try {
               const airplane = await airplaneService.destroyAirplane(req.params.id);
               SuccessResponse.data = airplane;
@@ -86,7 +81,6 @@ async function destroyAirplane(req, res) {
 
 }
 async function updateAirplane(req, res) {
-       console.log(req.params.id);
        try {
               const airplane = await airplaneService.updateAirplane(req.params.id, {
                      modelNumber: req.body.modelNumber,
