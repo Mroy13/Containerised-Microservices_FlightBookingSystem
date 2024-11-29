@@ -47,75 +47,34 @@ The project utilizes Docker Compose for managing the multi-container setup. Key 
 4. [NOTIFICATION_SERVICE_FLIGHTBOOKING_SYSTEM](https://documenter.getpostman.com/view/28392756/2sAXjNXAy4)
 
 
-## Setup and Configuration
 
- - Download or clone this project from github and open it in your favourite text editor. 
- 
- - In the root directory, create a .env file and add the following environment variables for the database service setup:
-    ```
-        USER='enter user name'
-        PASSWORD='eneter password'
-        ROOT_PASSWORD='enter rootPassword'
-        
-    ```
-    ex: 
-    ```
-        USER='mroy13'
-        PASSWORD='mr@123'
-        ROOT_PASSWORD='mr@123'
-        
-    ```
- 
- - Go inside api_gateway folder create a `.env` file and add the following env variables
- ```
-    PORT=<port number of your choice>
-    SALT_ROUND=<enter number of your choice>
-    SECRET_KEY='<eneter any key>'
-    FLIGHT_SERVICE='http://flight-service:3000'
-    BOOKING_SERVICE='http://booking-service:4000'
-    
- ```
- - Go inside Booking_service folder create a `.env` file and add the following env variables
 
- ```
-    PORT=<port number of your choice>
-    HOST_PORT=<flightService localhost url>
- ```
- 
- - Go inside Flight_Service folder create a `.env` file and add the following env variables
+---
 
- ```
-       PORT=<port number of your choice>
- ```
- 
- - Go inside Notification_Service folder create a `.env` file and add the following env variables
+# Setting Up Sequelize Configuration in Microservices
 
- ```
-    PORT=<port number of your choice>
-    MAIL_USERNAME='<enter user name>'
-    MAIL_APP_PASSWORD='<enter app pwd>'
- ```
+Follow these steps to configure Sequelize for your microservices.
 
-### Setting up Sequelize Configuration in Microservices
+---
 
-To configure Sequelize for your microservices, follow these steps:
+## Step 1: Initialize Sequelize Configuration
 
-### Step 1: Navigate to Microservice Folders
-
-Navigate to each microservice folder and execute the following command:
+For each microservice, navigate to the `src` directory and execute the following command:
 
 ```bash
-cd path/to/microservice-folder
+cd path/to/microservice/src
 npx sequelize init:config
 ```
 
 Repeat this step for every microservice in your project.
 
-### Step 2: Update MySQL Configuration
+---
 
-Open the generated Sequelize configuration file (`config/config.json`) inside each microservice folder. Add the MySQL root user and password or the user and password used during MySQL service setup.
+## Step 2: Update MySQL Configuration
 
-Example configuration snippet in `config/config.json`:
+Open the generated Sequelize configuration file (`src/config/config.json`) inside each microservice and update the database connection details as required.
+
+Here’s an example configuration snippet:
 
 ```json
 {
@@ -126,20 +85,40 @@ Example configuration snippet in `config/config.json`:
     "host": "db-service",
     "dialect": "mysql"
   },
-  // ... other configurations
+  "test": {
+    "username": "root",
+    "password": "enter_password",
+    "database": "test_database",
+    "host": "db-service",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "enter_password",
+    "database": "production_database",
+    "host": "db-service",
+    "dialect": "mysql"
+  }
 }
 ```
 
-## Database Configuration Fields
+---
 
-- **username**: Your database username (e.g., `"root"`).
-- **password**: The password used during the database service setup using docker compose.
-- **database**: The name of your database (change to your specific database name).
-- **host**: The address of your database server (default is `"db-service"`, change if you rename the service).
-- **dialect**: The database type (set to `"mysql"` for MySQL).
+### Database Configuration Fields
+
+- **`username`**: Your database username (e.g., `"root"`).
+- **`password`**: The password used during the database service setup using Docker Compose.
+- **`database`**: The name of your database (e.g., `"your_database_name"`).
+- **`host`**: The address of your database server (default is `"db-service"`, change this if you rename the service).
+- **`dialect`**: The database type (set this to `"mysql"` for MySQL).
+
+---
+
 
 
 - To initiate the microservices server and construct the necessary images and containers, execute the following command after setting up Docker:
+
+- Inside root directory execute:
   
    ```
     docker compose up -d
