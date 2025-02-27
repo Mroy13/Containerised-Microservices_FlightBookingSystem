@@ -5,12 +5,12 @@
 
 This Flight Booking System is designed as a microservices architecture using Docker containers. It comprises four microservices, along with supporting containers for RabbitMQ (message queue) and MySQL (database). Docker Compose orchestrates these services for seamless deployment.
 
-## Microservices
+## Microservices  
 
-1. **API Gateway:** Handles external requests, routing them to appropriate microservices and manages authentication and authorization.
-2. **Flight Service:** Manages flight-related information, such as airplanes, airport, flights.
-3. **Booking Service:** Handles flight bookings, payment, and messages after successful booking.
-4. **Notification Service:** Manages notifications and communications related to bookings, updates, and reminders.
+1. **[API Gateway](https://github.com/Mroy13/API_Gateway_fightBooking):** Handles external requests, routing them to appropriate microservices and manages authentication and authorization.  
+2. **[Flight Service](https://github.com/Mroy13/FB_Service1_FlightService):** Manages flight-related information, such as airplanes, airports, and flights.  
+3. **[Booking Service](https://github.com/Mroy13/Service2_Flight-booking-service):** Handles flight bookings, payments, and messages after successful booking.  
+4. **[Notification Service](https://github.com/Mroy13/Notification_service_flightBooking):** Manages notifications and communications related to bookings, updates, and reminders.  
 
 ## Dockerized Deployment
 
