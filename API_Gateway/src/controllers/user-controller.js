@@ -14,7 +14,6 @@ async function createUser(req, res) {
                   .json(SuccessResponse);
     }
     catch (error) {
-          // console.log(error);
            ErrorResponse.error = error;
            return res
                   .status(error.statusCode)
@@ -30,14 +29,12 @@ async function userSignin(req, res) {
                      email: req.body.email,
                      password:req.body.password
               });
-             // console.log(response);
               SuccessResponse.data = response;
               return res
                      .status(StatusCodes.CREATED)
                      .json(SuccessResponse);
        }
        catch (error) {
-             // console.log(error);
               ErrorResponse.error = error;
               return res
                      .status(error.statusCode)

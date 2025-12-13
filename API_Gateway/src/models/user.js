@@ -42,7 +42,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
-  //console.log(typeof(ServerConfig.SALTROUNDS));
   User.beforeCreate(function createHashpassword(user, options){
     const hashPassword = bcrypt.hashSync(user.password,+ServerConfig.SALTROUNDS);
     user.password=hashPassword;

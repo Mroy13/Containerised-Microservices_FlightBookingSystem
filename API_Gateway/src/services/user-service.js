@@ -9,7 +9,6 @@ const UserRepository = new userRepository();
 
 
 async function createUser(data) {
-    // console.log(data);
     try {
         const user = await UserRepository.create(data);
         await UserRepository.addroleTouser(user);
@@ -20,7 +19,6 @@ async function createUser(data) {
     }
     //client side errorHandling
     catch (error) {
-        //  console.log(error);
         if (error.name == 'SequelizeValidationError' || error.name == 'SequelizeUniqueConstraintError') {
             const explanation = [];
             error.errors.forEach(err => {
@@ -39,7 +37,6 @@ async function createUser(data) {
 async function userSignin(data) {
     try {
         const userData = await UserRepository.findUser(data.email);
-        // console.log(userData);
         if (!userData) {
             throw new Apperror("[user not found]", StatusCodes.NOT_FOUND);
         }
@@ -47,13 +44,9 @@ async function userSignin(data) {
         if (!res) {
             throw new Apperror("[invalid password]", StatusCodes.UNAUTHORIZED);
         }
-        //data.id=userData.id;
-        // const jwtToken= createJwttoken(data,ServerConfig.SECRET_KEY); 
         const jwtToken = Auth.createJwttoken({ id: userData.id, email: userData.email }, ServerConfig.SECRET_KEY);
-        //  console.log(jwtToken);
         return jwtToken;
     } catch (error) {
-        // console.log(error);
         throw error;
     }
 }
@@ -70,7 +63,6 @@ async function isAuthenticated(token) {
         }
 
     } catch (error) {
-        //console.log(error);
         throw error;
     }
 }

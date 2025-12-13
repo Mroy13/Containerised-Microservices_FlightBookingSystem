@@ -25,7 +25,6 @@ class userRepository extends crudRepository {
              const res=await user.addRole(role);
             // return res;
         } catch (error) {
-           // console.log(error);
             throw error;
         }
     }

@@ -39,7 +39,6 @@ async function checkAuth(req, res, next) {
         }
     }
     catch (error) {
-        // console.log(error);
         ErrorResponse.message = error
         return res
             .status(StatusCodes.BAD_REQUEST)
@@ -58,7 +57,6 @@ async function isAdmin(req, res, next) {
         }
     }
     catch (error) {
-    // console.log(error);
      ErrorResponse.message = error
      return res
          .status(StatusCodes.UNAUTHORIZED)
