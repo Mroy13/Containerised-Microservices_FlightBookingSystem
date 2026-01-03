@@ -1,42 +1,50 @@
- const express=require('express');
- const amqplib = require('amqplib');
- const routes=require('./routes');
- const {ServerConfig}=require('./config');
- const {emailService}=require('./services');
+const express = require('express');
+const amqplib = require('amqplib');
+const routes = require('./routes');
+const { ServerConfig } = require('./config');
 
- async function consumeData(){
-  try{
-  //console.log("inside consume");
-  const connection=await amqplib.connect(ServerConfig.amqp_url);
-  const channel=await connection.createChannel();
-  await channel.assertQueue('noti-queue');
-  await channel.consume('noti-queue',async(data)=>{
-    if(data){
-   // console.log(data.content.toString());
-    //console.log(Buffer.from(data.content));
-    const object=JSON.parse(data.content.toString());
-    //console.log(object);
-    const res= await emailService.sendEmail('projectemailservice13@gmail.com',object.recipientEmail,object.subject,object.message);
-   // console.log(res);
-    channel.ack(data);
-    }
-  });
+const { startConsumer, stopConsumer } = require('./config/queue-config');
 
+let server;
+let shuttingDown = false;
 
-}catch(error){
-  console.log(error);
-  throw error;
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/api', routes);
+
+async function startServer() {
+  try {
+    await startConsumer();
+    server = app.listen(ServerConfig.PORT, () => {
+      console.log(`Server running on port ${ServerConfig.PORT}`);
+    });
+  } catch (err) {
+    console.error('Startup failed', err);
+    process.exit(1);
+  }
 }
 
-  
- } 
+async function shutdown() {
+  if (shuttingDown) return;
+  shuttingDown = true;
 
+  console.log('Shutting down consumer service...');
 
- const app=express();
- app.use(express.json());
- app.use(express.urlencoded({extended: true}));
- app.use('/api',routes);
- app.listen(ServerConfig.PORT,async()=>{
-   console.log(`server is up at port no ${ServerConfig.PORT}`);
-   await consumeData();
- })
+  try {
+    await stopConsumer();
+  } catch (err) {
+    console.error('Error during shutdown', err);
+  }
+
+  if (server) {
+    server.close(() => process.exit(0));
+  } else {
+    process.exit(0);
+  }
+}
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
+startServer();

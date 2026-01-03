@@ -33,7 +33,6 @@ async function makePayment(req, res) {
        try {
               // Added idempotency in payment api
               const idemppotentKey = req.headers['x-idempotent-key'];
-              console.log(idemppotentKey);
               if (!idemppotentKey) {
                      return res
                             .status(StatusCode.BAD_REQUEST)

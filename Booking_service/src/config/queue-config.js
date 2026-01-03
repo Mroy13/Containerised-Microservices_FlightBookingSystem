@@ -1,33 +1,54 @@
 const amqplib = require('amqplib');
-const ServerConfig1=require('./server-config');
-console.log(ServerConfig1);
-let channel,connection;
-async function connectQueue(){
-    try {
-       // console.log("notiqueue");
-             connection=await amqplib.connect(ServerConfig1.amqp_url);
-             channel=await connection.createChannel();
-             //console.log(channel);
-        await channel.assertQueue('noti-queue');
+const ServerConfig = require('./server-config');
+let channel, connection;
 
-    } catch (error) {
-        console.log(error);
-        throw error;
+async function connectQueue() {
+    try {
+        connection = await amqplib.connect(ServerConfig.amqp_url);
+
+        connection.on('error', err => {
+            console.error('AMQP connection error', err);
+        });
+
+        connection.on('close', () => {
+            console.error('AMQP connection closed. Reconnecting...');
+            setTimeout(connectQueue, 5000);
+        });
+
+        channel = await connection.createConfirmChannel();
+
+        await channel.assertQueue(ServerConfig.QUEUE_NAME, {
+            durable: true
+        });
+
+        console.log('RabbitMQ connected');
+    } catch (err) {
+        console.error('RabbitMQ connection failed', err);
+        setTimeout(connectQueue, 5000);
     }
 }
 
 
-async function sendData(data){
-   // console.log(data);
-   // console.log(channel);
+async function sendData(data) {
     try {
-        await channel.sendToQueue('noti-queue',Buffer.from(JSON.stringify(data)))
+        if (!channel) {
+            throw new Error('RabbitMQ channel not initialized');
+        }
+        channel.sendToQueue(ServerConfig.QUEUE_NAME, Buffer.from(JSON.stringify(data)), { persistent: true });
     } catch (error) {
-        console.log("queue-error:",error);
+        console.log("queue-error:", error);
     }
 }
 
-module.exports={
+
+async function closeQueue() {
+  if (channel) await channel.close();
+  if (connection) await connection.close();
+}
+
+
+module.exports = {
     connectQueue,
-    sendData
+    sendData,
+    closeQueue
 }

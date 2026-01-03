@@ -6,6 +6,4 @@ function info(req,res){
     SuccessResponse.message="API is live";
     return res.status(StatusCodes.OK).json(SuccessResponse);
 }
-module.exports={ info
-
-                     }                      
+module.exports={ info  }                      
