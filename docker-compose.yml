@@ -41,6 +41,8 @@ services:
     depends_on:
        db-service:
          condition: service_healthy
+       redis:
+         condition: service_healthy
     volumes:
       - ./API_Gateway:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/api-gateway
       - api-gateway-nodemodules:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/api-gateway/node_modules
@@ -57,7 +59,19 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    
+
+  redis:
+   image: "redis:8.4.0"
+   networks:
+     - micro-net
+   restart: always
+   healthcheck:
+     test: ["CMD", "redis-cli", "ping"]
+     interval: 5s
+     timeout: 3s
+     retries: 5
+
+
   booking-service:
     entrypoint: ["./entrypoint.sh"]
     build: ./Booking_service
@@ -84,6 +98,8 @@ services:
       - "3000:3000"
     depends_on:
        db-service:
+         condition: service_healthy
+       redis:
          condition: service_healthy
     volumes:
       - ./Flight_service:/d/fstack_dev/Backend_dev/Deployment/Containerised-microservices-fb/flight-service

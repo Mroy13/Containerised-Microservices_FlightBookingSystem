@@ -5,5 +5,7 @@ module.exports = {
     SALTROUNDS: process.env.SALT_ROUND,
     SECRET_KEY: process.env.SECRET_KEY,
     flight_service: process.env.FLIGHT_SERVICE,
-    booking_service: process.env.BOOKING_SERVICE
+    booking_service: process.env.BOOKING_SERVICE,
+    REDIS_HOST:process.env.REDIS_HOST,
+    REDIS_PORT:process.env.REDIS_PORT
 }

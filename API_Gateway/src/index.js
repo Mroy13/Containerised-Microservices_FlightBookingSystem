@@ -2,8 +2,8 @@ const express=require('express');
 const routes=require('./routes');
 const rateLimit = require('express-rate-limit')
 const { createProxyMiddleware } = require('http-proxy-middleware');
- const {ServerConfig}=require('./config');
-const serverConfig = require('./config/server-config');
+const {ServerConfig}=require('./config');
+
  
 
  const app=express();
@@ -19,13 +19,13 @@ const serverConfig = require('./config/server-config');
 
  app.use(limiter);
 
- app.use('/flightservice', createProxyMiddleware({ target: serverConfig.flight_service, changeOrigin: true ,
+ app.use('/flightservice', createProxyMiddleware({ target: ServerConfig.flight_service, changeOrigin: true ,
  pathRewrite: {
   '^/flightservice': '/',
 },
 }));
 
- app.use('/bookingservice', createProxyMiddleware({ target: serverConfig.booking_service, changeOrigin: true ,
+ app.use('/bookingservice', createProxyMiddleware({ target: ServerConfig.booking_service, changeOrigin: true ,
  pathRewrite: {
   '^/bookingservice': '/',
 },
